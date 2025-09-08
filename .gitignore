@@ -1,35 +1,20 @@
-# dependencies
-node_modules/
+# Python virtual environments
+sports_env/
+venv/
+.venv/
+new_sports_env/
 
-# expo
-.expo/
-dist/
-web-build/
-expo-env.d.ts
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
 
-# native
-*.orig.*
-*.jks
-*.p8
-*.p12
-*.key
-*.mobileprovision
-
-# metro
-.metro-health-check*
-
-# debug
-npm-debug.*
-yarn-debug.*
-yarn-error.*
-
-# macos
+# macOS system files
 .DS_Store
-*.pem
 
-# local env files
-.env*.local
+# Environment variables
 .env
 
-# typescript
-*.tsbuildinfo
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/

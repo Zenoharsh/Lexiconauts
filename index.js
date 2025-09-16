@@ -1,4 +1,3 @@
-// index.js
 const express = require("express");
 require("dotenv").config();
 
@@ -10,22 +9,23 @@ app.use(express.json());
 
 // Import DB setup and routes
 const createUsersTable = require("./dbsetup");
-const authRoutes = require("./routes/auth"); // signup/login routes
-app.use("/api/auth", authRoutes);
-
+const authRoutes = require("./routes/auth");
 const protectedRoutes = require("./routes/protected");
-app.use("/api", protectedRoutes);  // example: /api/dashboard
+const videoRoutes = require("./routes/videos");
 
+// Routes
+app.use("/api/auth", authRoutes);
+app.use("/api", protectedRoutes);
+app.use("/api/videos", videoRoutes); // 🔥 video routes added
 
 // Root route
 app.get("/", (req, res) => {
-  res.send("Hello from Express + PostgreSQL!");
+  res.send("Hello from Express + PostgreSQL + Cloudinary! 🚀");
 });
+
 // Start server
 createUsersTable().then(() => {
   app.listen(port, () => {
     console.log(`🚀 Server running at http://localhost:${port}`);
   });
 });
-
-

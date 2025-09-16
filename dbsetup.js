@@ -2,11 +2,11 @@ const pool = require('./db');
 
 const dropAndCreateUsersTable = async () => {
   try {
-    // Drop old table if exists
-    await pool.query(`DROP TABLE IF EXISTS users`);
+    // Drop old users table if exists
+    await pool.query(`DROP TABLE IF EXISTS users CASCADE`);
     console.log('Old users table dropped');
 
-    // Create new table
+    // Create new users table
     await pool.query(`
       CREATE TABLE users (
         id SERIAL PRIMARY KEY,
@@ -20,8 +20,28 @@ const dropAndCreateUsersTable = async () => {
       )
     `);
     console.log('New users table created');
+
+    // Drop videos table if exists
+    await pool.query(`DROP TABLE IF EXISTS videos CASCADE`);
+    console.log('Old videos table dropped');
+
+    // Create new videos table
+    await pool.query(`
+      CREATE TABLE videos (
+        id SERIAL PRIMARY KEY,
+        user_id INT REFERENCES users(id) ON DELETE CASCADE,
+        original_name TEXT NOT NULL,
+        url TEXT NOT NULL,
+        public_id VARCHAR(255) NOT NULL,
+        mimetype TEXT NOT NULL,
+        size BIGINT NOT NULL,
+        description TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    console.log('Videos table created');
   } catch (err) {
-    console.error('Error dropping/creating users table', err);
+    console.error('Error dropping/creating tables', err);
   }
 };
 

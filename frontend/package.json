@@ -1,13 +1,14 @@
 {
-  "name": "bolt-expo-starter",
-  "main": "expo-router/entry",
+  "name": "backend",
   "version": "1.0.0",
-  "private": true,
+  "main": "index.js",
   "scripts": {
-    "dev": "EXPO_NO_TELEMETRY=1 expo start",
-    "build:web": "expo export --platform web",
-    "lint": "expo lint"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
   "dependencies": {
     "@expo-google-fonts/inter": "^0.4.1",
     "@expo-google-fonts/poppins": "^0.4.0",

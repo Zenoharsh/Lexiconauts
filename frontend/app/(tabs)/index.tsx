@@ -5,6 +5,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Trophy, Target, TrendingUp, Play } from 'lucide-react-native';
 import Animated, { FadeInDown, FadeInUp, useSharedValue, withRepeat, withTiming, Easing, useAnimatedStyle } from 'react-native-reanimated';
 import { AnimatedGlowIcon, FireProgress } from '../../components/AnimatedGlowIcon';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
+import { useRouter } from "expo-router";
+import { Button } from "react-native";
+
 
 const { width } = Dimensions.get('window');
 
@@ -30,6 +35,10 @@ interface RecentActivity {
 
 
 export default function HomeScreen() {
+  const router = useRouter();
+  const navigation = useNavigation();
+
+
   const [achievements] = useState<Achievement[]>([
     {
       id: '1',
@@ -86,7 +95,18 @@ export default function HomeScreen() {
       improvement: 4,
     },
   ]);
-
+ const logout = async () => {
+    try {
+      await AsyncStorage.removeItem("token"); // token clear
+      
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Login" }], // 👈 Login screen pe redirect
+      });
+    } catch (error) {
+      console.log("Logout error:", error);
+    }
+  };
   const userName = 'Arjun Singh';
   const overallScore = 87;
   const rank = 23;
@@ -101,6 +121,15 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* {🔥 Logout Button top-right} */}
+    <TouchableOpacity
+      onPress={logout}
+      style={{ position: "absolute", top: 40, right: 20 }}
+    >
+      <Text style={{ color: "red", fontWeight: "bold", fontSize: 16 }}>
+        Logout
+      </Text>
+    </TouchableOpacity>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
         <Animated.View entering={FadeInDown.duration(800)} style={styles.header}>
           <View style={styles.headerContent}>

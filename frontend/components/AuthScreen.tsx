@@ -5,6 +5,8 @@ import { Video, AVPlaybackStatus, ResizeMode, VideoReadyForDisplayEvent } from '
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import * as Haptics from 'expo-haptics';
+import { login, signup } from "../app/api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from 'expo-router';
 import { Eye, EyeOff, LogIn, UserPlus } from 'lucide-react-native';
 import SportifyLogo from './SportifyLogo';
@@ -76,19 +78,23 @@ export default function AuthScreen() {
     setError(null);
   };
 
-  const submitLogin = async () => {
+  c  const submitLogin = async () => {
     setError(null);
     if (!email.trim() || !password.trim()) {
-      setError('Please enter both email and password.');
+      setError("Please enter both email and password.");
       return;
     }
     setLoading(true);
     try {
+      const res = await login(email, password); // ✅ backend call
+      const { token } = res.data;
+
+      await AsyncStorage.setItem("token", token); // ✅ save token
       await Haptics.selectionAsync();
-      await new Promise((r) => setTimeout(r, 700));
-      router.replace('/');
-    } catch (e) {
-      setError('Unable to sign in. Please try again.');
+
+      router.replace("/"); // ✅ redirect to home
+    } catch (e: any) {
+      setError(e.response?.data?.message || "Unable to sign in. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -96,26 +102,31 @@ export default function AuthScreen() {
 
   const submitSignup = async () => {
     setError(null);
-    if (!fullName.trim()) return setError('Please enter your full name.');
-    if (!email.trim()) return setError('Please enter your email.');
-    if (!password.trim()) return setError('Please create a password.');
-    if (password !== confirmPassword) return setError('Passwords do not match.');
+    if (!fullName.trim()) return setError("Please enter your full name.");
+    if (!email.trim()) return setError("Please enter your email.");
+    if (!password.trim()) return setError("Please create a password.");
+    if (password !== confirmPassword) return setError("Passwords do not match.");
     const ageNum = Number(age);
-    if (!age || Number.isNaN(ageNum) || ageNum <= 0) return setError('Please enter a valid age.');
-    if (!gender) return setError('Please select a gender.');
-    if (!language) return setError('Please select a language.');
+    if (!age || Number.isNaN(ageNum) || ageNum <= 0) return setError("Please enter a valid age.");
+    if (!gender) return setError("Please select a gender.");
+    if (!language) return setError("Please select a language.");
 
     setLoading(true);
     try {
+      const res = await signup(email, password, fullName); // ✅ backend call
+      const { token } = res.data;
+
+      await AsyncStorage.setItem("token", token); // ✅ save token
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      await new Promise((r) => setTimeout(r, 900));
-      router.replace('/');
-    } catch (e) {
-      setError('Unable to sign up. Please try again.');
+
+      router.replace("/"); // ✅ redirect to home
+    } catch (e: any) {
+      setError(e.response?.data?.message || "Unable to sign up. Please try again.");
     } finally {
       setLoading(false);
     }
   };
+
 
   const GenderOption = ({ value }: { value: 'Male' | 'Female' }) => (
     <TouchableOpacity

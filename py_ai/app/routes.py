@@ -1,9 +1,10 @@
-from flask import Flask, request, jsonify
-from analyzer import analyze_video # <-- Import the new main function
+from flask import Blueprint, request, jsonify
+from .services import analyze_video
 
-app = Flask(__name__)
+# Create a Blueprint object
+main_routes = Blueprint('main_routes', __name__)
 
-@app.route('/api/analyze', methods=['POST'])
+@main_routes.route('/api/analyze', methods=['POST'])
 def analyze_video_endpoint():
     data = request.get_json()
     if not data or 'video_url' not in data or 'exercise_type' not in data:
@@ -12,10 +13,6 @@ def analyze_video_endpoint():
     video_url = data['video_url']
     exercise_type = data['exercise_type']
     
-    # Call your new universal analysis function
+    # Call the analysis function from services.py
     result = analyze_video(video_url, exercise_type)
-
     return jsonify(result)
-
-if __name__ == '__main__':
-    app.run(debug=True, port=5000)

@@ -3,7 +3,7 @@ gunicorn
 requests
 numpy==2.2.4
 opencv-python-headless
-tensorflow
+tensorflow-cpu
 tensorflow_hub
 scikit-learn
 ultralytics

@@ -1,9 +1,15 @@
-flask
-gunicorn
+# Web Server
+flask==2.3.3
+gunicorn==21.2.0
+
+# ML & AI Core (Pinned Versions)
+tensorflow-cpu==2.15.0
+tensorflow_hub==0.16.1
+keras==2.15.0
+h5py
+
+# Utilities
 requests
-numpy==2.2.4
+numpy==1.26.4
 opencv-python-headless
-tensorflow-cpu
-tensorflow_hub
 scikit-learn
-ultralytics
